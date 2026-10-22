@@ -93,12 +93,24 @@ footer{background:#080c14;border-top:1px solid #121b2d;padding:20px 0}
 footer .wrap{text-align:center}
 footer .l{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 56px;font-size:.78rem;color:#9aa3b2}
 
+.burger{display:none;width:32px;height:32px;margin-left:-9px;padding:0;background:none;border:0;cursor:pointer;place-items:center;align-content:center;gap:3px;color:#b4bdcc}
+.burger span{display:block;width:14px;height:2px;border-radius:1px;background:currentColor;transition:transform .2s,opacity .2s}
+header.open .burger span:nth-child(1){transform:translateY(5px) rotate(45deg)}
+header.open .burger span:nth-child(2){opacity:0}
+header.open .burger span:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
 @media (max-width:860px){
   .about,.two,.pts{grid-template-columns:1fr;gap:28px}
   .cols{grid-template-columns:1fr 1fr;gap:28px 0}
   .row{grid-template-columns:1fr;gap:14px}
   section{padding:68px 0}
-  .bar{grid-template-columns:auto 1fr}nav{justify-self:end}nav ul{gap:14px}nav a{font-size:.62rem;letter-spacing:.08em}
+  .bar{grid-template-columns:1fr auto 1fr}
+  .brand{grid-column:2;grid-row:1;justify-self:center}
+  .burger{display:grid;grid-column:1;grid-row:1;justify-self:start}
+  nav{display:block;position:absolute;top:calc(100% + 6px);left:24px;width:190px;background:#0d1626;border:1px solid var(--line);border-radius:6px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:2px 16px;visibility:hidden;opacity:0;transform:translateY(-6px);transition:opacity .2s,transform .2s,visibility .2s}
+  header.open nav{visibility:visible;opacity:1;transform:none}
+  nav ul{flex-direction:column;gap:0}
+  nav a{display:block;padding:12px 0;font-size:.72rem;letter-spacing:.14em;border-bottom:1px solid var(--line)}
+  nav li:last-child a{border-bottom:0}
 }
 @media (max-width:520px){.cols{grid-template-columns:1fr}.wm small{letter-spacing:.3em}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -112,9 +124,10 @@ footer .l{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 56px;font-s
 <header>
   <div class="wrap bar">
     <a class="brand" href="#top" aria-label="ANK Company home"><svg><use href="#mark"/></svg><span class="wm"><b>ANK</b><small>COMPANY</small></span></a>
-    <nav aria-label="Main"><ul>
+    <nav id="nav" aria-label="Main"><ul>
       <li><a href="#about">About</a></li><li><a href="#structure">Structure</a></li><li><a href="#companies">Companies</a></li><li><a href="#contact">Contact</a></li>
     </ul></nav>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
   </div>
 </header>
 
@@ -221,5 +234,14 @@ footer .l{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 56px;font-s
     <div class="l"><span>© 2026 ANK Company. All rights reserved.</span><span>Group entities: ANK Company Digital LLC (United States), ANK Company Digital LTDA (Brazil).</span></div>
   </div>
 </footer>
+<script>
+(function(){var h=document.querySelector('header'),b=h.querySelector('.burger');
+function set(o){h.classList.toggle('open',o);b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu')}
+b.addEventListener('click',function(){set(!h.classList.contains('open'))});
+h.querySelectorAll('nav a').forEach(function(a){a.addEventListener('click',function(){set(false)})});
+document.addEventListener('click',function(e){if(!h.contains(e.target))set(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+window.addEventListener('resize',function(){if(window.innerWidth>860)set(false)});})();
+</script>
 </body>
 </html>
